@@ -27,8 +27,9 @@
 
                 $('<i style="color: #eee; cursor: move; margin-left: 3px;" class="node-input-scene-handle fa fa-bars"></i>').appendTo(row);
 
-                var valueField = $('<input/>',{class:"node-input-scene-value",type:"text",style:"margin-left: 7px; width: 135px;", placeholder: 'Value',value:scene.value}).appendTo(row).typedInput({default: 'str',types:['str','num','bool', 'json']});
+                var valueField = $('<input/>',{class:"node-input-scene-value",type:"text",style:"margin-left: 7px; width: 135px;", placeholder: 'Value',value:scene.value}).appendTo(row).typedInput({default: 'str',types:['str','num','bool', 'json', 'bin']});
                 var labelField = $('<input/>',{class:"node-input-scene-time",type:"text",style:"margin-left: 7px; width: 135px;", placeholder: 'Time', value:scene.time}).appendTo(row).typedInput({default:'num',types:['num']});
+                var interpolField = $('<select><option value="none">None</option><option value="linear">Linear</option>',{class:"node-input-scene-interpol",type:"text",style:"margin-left: 7px; width: 80px;", placeholder: 'Interpolation', value:scene.interpol}).appendTo(row);
 
                 var finalspan = $('<span/>',{style:"float: right;margin-right: 10px;"}).appendTo(row);
                 var deleteButton = $('<a/>',{href:"#",class:"editor-button editor-button-small", style:"margin-top: 7px; margin-left: 5px;"}).appendTo(finalspan);

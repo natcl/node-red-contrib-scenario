@@ -13,6 +13,13 @@
             return this.name||"scenario";
         },
         oneditprepare: function() {
+            $('#dialog-form').css({
+                display: 'flex',
+                flexDirection: 'column'
+            })
+            $('#dialog-form .form-row').css({
+                display: 'flex'
+            })
 
             this.resizeRule = function(scene,newWidth) {
                 scene.find(".node-input-scene-value").width(newWidth);
@@ -21,18 +28,22 @@
 
             function generateScene(i, scene) {
                 var container = $('<li/>',{style:"background: #fff; margin:0; padding:8px 0px 0px; border-bottom: 1px solid #ccc;"});
-                var row = $('<div/>').appendTo(container);
+                var row = $('<div style="display: flex; align-items: center;"/>').appendTo(container);
                 var row2 = $('<div/>',{style:"padding-top: 5px; padding-left: 175px;"}).appendTo(container);
                 var row3 = $('<div/>',{style:"padding-top: 5px; padding-left: 120px;"}).appendTo(container);
 
                 $('<i style="color: #eee; cursor: move; margin-left: 3px;" class="node-input-scene-handle fa fa-bars"></i>').appendTo(row);
+                $('<span class="index" style="margin-left: 7px">' + i + '</span>').appendTo(row);
 
                 var valueField = $('<input/>',{class:"node-input-scene-value",type:"text",style:"margin-left: 7px; width: 135px;", placeholder: 'Value',value:scene.value}).appendTo(row).typedInput({default: 'str',types:['str','num','bool', 'json', 'bin']});
+                valueField.parents('.red-ui-typedInput-container').css({
+                  flexGrow: 1
+                })
                 var labelField = $('<input/>',{class:"node-input-scene-time",type:"text",style:"margin-left: 7px; width: 135px;", placeholder: 'Time', value:scene.time}).appendTo(row).typedInput({default:'num',types:['num']});
-                var interpolField = $('<select><option value="none">None</option><option value="linear">Linear</option>',{class:"node-input-scene-interpol",type:"text",style:"margin-left: 7px; width: 80px;", placeholder: 'Interpolation', value:scene.interpol}).appendTo(row);
+                var interpolField = $('<select style="margin-left: 7px; width: auto;"><option value="none">None</option><option value="linear">Linear</option>',{class:"node-input-scene-interpol",type:"text",style:"margin-left: 7px; width: 80px;", placeholder: 'Interpolation', value:scene.interpol}).appendTo(row);
 
                 var finalspan = $('<span/>',{style:"float: right;margin-right: 10px;"}).appendTo(row);
-                var deleteButton = $('<a/>',{href:"#",class:"editor-button editor-button-small", style:"margin-top: 7px; margin-left: 5px;"}).appendTo(finalspan);
+                var deleteButton = $('<a/>',{href:"#",class:"editor-button editor-button-small", style:"margin-left: 5px;"}).appendTo(finalspan);
                 $('<i/>',{class:"fa fa-remove"}).appendTo(deleteButton);
 
                 deleteButton.click(function() {
@@ -54,11 +65,15 @@
                 var scene = this.scenes[i];
                 generateScene(i+1,scene);
             }
-
             $( "#node-input-scene-container" ).sortable({
                 axis: "y",
                 handle:".node-input-scene-handle",
-                cursor: "move"
+                cursor: "move",
+                update: function () {
+                    $('#node-input-scene-container li').each(function (i, el) {
+                        $(el).find('.index').html(i + 1)
+                    })
+                }
             });
         },
         oneditsave: function() {
@@ -100,13 +115,17 @@
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-    <div class="form-row node-input-scene-container-row" style="margin-bottom: 0px;width: 100%">
+    <div class="form-row node-input-scene-container-row" style="display: flex; flex-grow: 1;">
         <label for="node-input-width" style="vertical-align:top"><i class="fa fa-list-alt"></i> Scenes</label>
-        <div id="node-input-scene-container-div" style="box-sizing: border-box; border-radius: 5px; height: 257px; padding: 5px; border: 1px solid #ccc; overflow-y:scroll;display: inline-block; width: calc(70% + 15px);">
+        <div id="node-input-scene-container-div" style="box-sizing: border-box; border-radius: 5px; padding: 5px; border: 1px solid #ccc; overflow-y:scroll;display: inline-block; width:70%;">
             <ol id="node-input-scene-container" style=" list-style-type:none; margin: 0;"></ol>
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row" style="display: flex; margin-left:100px; width: 70%; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center;">
+          <input style="width:auto; margin: 0;" type="checkbox" id="node-checkbox-loop"/>
+          <label style="margin-left: 7px; margin-bottom: 0;" for="node-checkbox-loop">Loop <i class="fa fa-repeat" aria-hidden="true"></i></label>
+        </div>
         <a href="#" class="editor-button editor-button-small" id="node-input-add-scene" style="margin-top: 4px; margin-left: 103px;"><i class="fa fa-plus"></i> <span>scene</span></a>
     </div>
 </script>
